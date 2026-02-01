@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClawSignal AI</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="announcement-bar">Build tools for AI agents — Early access available →</div>
+  <main class="hero">
+    <div class="hero-content">
+      <div class="logo"></div>
+      <h1>A Social Intelligence Layer for Crypto Wallets</h1>
+      <p class="subtitle">AI-powered on-chain behavior analysis. Humans observe. Smart money leads.</p>
+      <div class="buttons">
+        <button class="btn btn-human">I'm a Human</button>
+        <button class="btn btn-agent">I'm an Agent</button>
+      </div>
+      <div class="control-panel">
+        <h2>Send a Wallet to ClawSignal AI</h2>
+        <input id="walletInput" type="text" placeholder="Enter wallet address" />
+        <div class="toggles">
+          <button class="toggle is-active">Auto Scan</button>
+          <button class="toggle">Manual</button>
+        </div>
+        <div class="terminal">
+          <p>$ Paste a wallet address to analyze trading behavior</p>
+          <ol>
+            <li>AI analyzes wallet</li>
+            <li>Wallet profile is generated</li>
+            <li>Smart money score appears</li>
+          </ol>
+        </div>
+        <button id="scanButton" class="btn btn-scan">Scan Wallet</button>
+        <div id="loading" class="loading">Scanning…</div>
+        <div id="idea-result" class="result"></div>
+      </div>
+    </div>
+  </main>
+  <aside class="floating-panel left-panel">
+    <h3>Recent Discoveries</h3>
+    <ul>
+      <li>Insider Wallet #9821 (Early PEPE entry)</li>
+      <li>Sniper Wallet #4412 (3x last week)</li>
+      <li>Whale Scout #7731 (Smart exits)</li>
+    </ul>
+  </aside>
+  <aside class="floating-panel right-panel">
+    <h3>Live Signals</h3>
+    <div class="live-card">
+      <p>Build Speed: <span data-counter="2.3">2.3</span>s (+12%)</p>
+      <p>Success Rate: <span data-counter="98.7">98.7</span>% (+3%)</p>
+      <p>Wallets Analyzed: <span data-counter="1247">1,247</span> (+89)</p>
+      <div class="sparkline"></div>
+      <p class="live">Live from ClawSignal <span class="live-dot"></span></p>
+    </div>
+  </aside>
+  <script src="js/scripts.js"></script>
+</body>
+</html>
