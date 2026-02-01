@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClawSignal AI — OpenClaw Wallet Intelligence Terminal</title>
+  <meta name="description" content="OpenClaw-powered on-chain wallet intelligence for memecoin traders. Real data, real signals." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true"></div>
+        <div class="brand__txt">
+          <div class="brand__name">ClawSignal AI</div>
+          <div class="brand__sub">Powered by OpenClaw agents • Solana memecoin intelligence</div>
+        </div>
+      </div>
+
+      <div class="topbar__right">
+        <div class="pill pill--live">
+          <span class="dot"></span> Live
+        </div>
+        <button class="btn btn--ghost" id="copyLinkBtn" type="button" title="Copy share link">Copy Share Link</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="panel panel--left">
+    <div class="panel__title">OpenClaw Agent Feed</div>
+    <div class="panel__sub">Real-time system logs (UI)</div>
+
+    <div class="log" id="agentLog" aria-live="polite">
+      <div class="log__line">$ openclaw/daemon: boot ok</div>
+      <div class="log__line">$ scout_agent: ready</div>
+      <div class="log__line">$ pattern_agent: ready</div>
+      <div class="log__line">$ score_agent: ready</div>
+      <div class="log__line">$ narrator_agent: ready</div>
+    </div>
+
+    <div class="panel__hr"></div>
+
+    <div class="panel__title">Token Utility (Optional)</div>
+    <div class="panel__sub">Token gating demo (no wallet connect yet)</div>
+
+    <div class="gate">
+      <div class="gate__row">
+        <div class="gate__label">Premium signals</div>
+        <div class="gate__value" id="gateState">LOCKED</div>
+      </div>
+
+      <label class="gate__check">
+        <input type="checkbox" id="gateCheck" />
+        I hold <b>$CLAW</b> (demo)
+      </label>
+
+      <div class="gate__actions">
+        <button class="btn btn--ghost" id="gateUnlockBtn" type="button">Unlock</button>
+        <button class="btn btn--ghost" id="gateResetBtn" type="button">Reset</button>
+      </div>
+
+      <div class="gate__hint">Later we can wire real token-balance checks (Solana mint) to unlock premium tiers.</div>
+    </div>
+  </aside>
+
+  <aside class="panel panel--right">
+    <div class="panel__title">Live Alpha Feed</div>
+    <div class="panel__sub">Signals update every few seconds</div>
+
+    <div class="feed" id="feed">
+      <div class="feed__inner" id="feedInner"></div>
+    </div>
+
+    <div class="panel__hr"></div>
+
+    <div class="panel__title">Today</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__k">Scan speed</div>
+        <div class="stat__v"><span id="sSpeed">2.3</span>s <span class="delta delta--pos">+12%</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat__k">Success rate</div>
+        <div class="stat__v"><span id="sRate">98.7</span>% <span class="delta delta--pos">+3%</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat__k">Wallets analyzed</div>
+        <div class="stat__v"><span id="sCount">1,247</span> <span class="delta delta--pos">+89</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="hero">
+      <div class="hero__head">
+        <h1>Wallet Intelligence Terminal</h1>
+        <p>Scan a Solana wallet, generate a real profile, and surface memecoin behavior signals.</p>
+      </div>
+
+      <div class="grid">
+        <section class="card card--scan">
+          <div class="card__head">
+            <div>
+              <div class="kicker">WALLET SCANNER</div>
+              <h2>Send a wallet to OpenClaw</h2>
+              <p class="muted">Uses real on-chain data via your Helius API key (free tier).</p>
+            </div>
+
+            <div class="modes">
+              <button class="chip chip--on" id="modeAuto" type="button">Auto</button>
+              <button class="chip" id="modeManual" type="button">Manual</button>
+            </div>
+          </div>
+
+          <label class="field">
+            <span class="field__label">Wallet address</span>
+            <input class="field__input" id="walletInput" placeholder="Paste Solana wallet address (base58)" autocomplete="off" />
+          </label>
+
+          <div class="actions">
+            <button class="btn" id="scanBtn" type="button">Scan Wallet</button>
+            <button class="btn btn--ghost" id="copyBtn" type="button" disabled>Copy Report</button>
+            <button class="btn btn--ghost" id="exampleBtn" type="button" title="Load example">Example</button>
+          </div>
+
+          <div class="terminal" id="terminal">
+            <div class="terminal__title">Agent Timeline</div>
+            <div class="terminal__body" id="terminalBody">
+              <div class="tline">$ paste a wallet address → scan</div>
+              <div class="tline dim">$ scout_agent: fetch swaps + tokens</div>
+              <div class="tline dim">$ pattern_agent: compute behavior metrics</div>
+              <div class="tline dim">$ score_agent: smart money score + confidence</div>
+              <div class="tline dim">$ narrator_agent: concise summary</div>
+            </div>
+          </div>
+
+          <div class="result" id="result" hidden>
+            <div class="result__top">
+              <div>
+                <div class="result__title">Wallet Profile</div>
+                <div class="result__addr" id="rAddr">—</div>
+              </div>
+              <div class="score">
+                <div class="score__k">Smart Money</div>
+                <div class="score__v" id="rScore">--</div>
+                <div class="score__c" id="rConf">—</div>
+              </div>
+            </div>
+
+            <div class="badges">
+              <span class="badge" id="bStyle">Style: —</span>
+              <span class="badge" id="bRisk">Risk: —</span>
+              <span class="badge" id="bTempo">Tempo: —</span>
+              <span class="badge badge--premium" id="bPremium" hidden>Premium signals</span>
+            </div>
+
+            <div class="mini">
+              <div class="mini__item">
+                <div class="mini__k">Tx scanned</div>
+                <div class="mini__v" id="mTx">—</div>
+              </div>
+              <div class="mini__item">
+                <div class="mini__k">Active tokens</div>
+                <div class="mini__v" id="mTok">—</div>
+              </div>
+              <div class="mini__item">
+                <div class="mini__k">Last activity</div>
+                <div class="mini__v" id="mLast">—</div>
+              </div>
+              <div class="mini__item">
+                <div class="mini__k">Early-entry %</div>
+                <div class="mini__v" id="mEarly">—</div>
+              </div>
+            </div>
+
+            <div class="split">
+              <div class="box">
+                <div class="box__k">Behavior DNA</div>
+                <div class="box__v" id="dna">—</div>
+              </div>
+              <div class="box">
+                <div class="box__k">Notable patterns</div>
+                <div class="box__v" id="pat">—</div>
+              </div>
+            </div>
+
+            <div class="premium" id="premium" hidden>
+              <div class="premium__title">Premium signals (token-gated)</div>
+              <div class="premium__grid">
+                <div class="pitem">Insider cluster confidence: <b id="pInsider">—</b></div>
+                <div class="pitem">Sniper probability: <b id="pSniper">—</b></div>
+                <div class="pitem">Exit discipline: <b id="pExit">—</b></div>
+                <div class="pitem">Alpha tags: <b id="pTags">—</b></div>
+              </div>
+            </div>
+
+            <div class="tokens">
+              <div class="tokens__head">
+                <div class="tokens__k">Top tokens interacted (from swaps)</div>
+                <div class="tokens__sub">We fetch market data via DexScreener (free) where available.</div>
+              </div>
+              <div class="tokens__grid" id="tokenGrid"></div>
+            </div>
+          </div>
+
+          <div class="hint">
+            <b>Important:</b> To make scans “real”, add a free <span class="mono">HELIUS_API_KEY</span> in Vercel project settings.
+          </div>
+        </section>
+
+        <section class="card card--radar">
+          <div class="kicker">NETWORK RADAR</div>
+          <h2>Wallet cluster map</h2>
+          <p class="muted">Animated visualization (UI). Premium unlock reveals extra nodes.</p>
+
+          <canvas id="radar" width="680" height="460" aria-label="Radar canvas"></canvas>
+
+          <div class="radarStats">
+            <div class="rstat"><span class="muted">Clusters</span><b id="rsClusters">3</b></div>
+            <div class="rstat"><span class="muted">Links</span><b id="rsLinks">18</b></div>
+            <div class="rstat"><span class="muted">Signals</span><b id="rsSignals">7</b></div>
+          </div>
+
+          <div class="legend">
+            <span class="tag tag--insider">insider</span>
+            <span class="tag tag--sniper">sniper</span>
+            <span class="tag tag--whale">whale</span>
+            <span class="tag tag--neutral">neutral</span>
+          </div>
+        </section>
+      </div>
+
+      <section class="sections">
+        <div class="sec">
+          <div class="kicker">WHAT MAKES IT LEGIT</div>
+          <h3>Real metrics → real scores</h3>
+          <p class="muted">No fake predictions. We compute wallet behavior signals from on-chain activity and market data.</p>
+          <ul class="list">
+            <li>Tx activity + token interactions</li>
+            <li>Behavior classification (sniper / insider-like / whale / holder)</li>
+            <li>Smart Money Score (0–100) + confidence</li>
+            <li>Token list enriched with DexScreener info</li>
+          </ul>
+        </div>
+
+        <div class="sec">
+          <div class="kicker">OPENCLAW INTEGRATION</div>
+          <h3>Agents you can see</h3>
+          <p class="muted">We expose agent steps in the terminal for transparency. Later we can integrate Telegram bots + token-gated API credits.</p>
+          <ul class="list">
+            <li>Scout Agent → fetch swaps</li>
+            <li>Pattern Agent → compute metrics</li>
+            <li>Score Agent → rank behavior</li>
+            <li>Narrator Agent → human-readable report</li>
+          </ul>
+        </div>
+
+        <div class="sec">
+          <div class="kicker">NEXT</div>
+          <h3>Turn this into a trader tool</h3>
+          <p class="muted">After MVP: build watchlists, alerts, and “smart wallets today” leaderboard.</p>
+          <div class="ctaRow">
+            <button class="btn btn--ghost" id="openGuideBtn" type="button">Open Setup Guide</button>
+            <button class="btn btn--ghost" id="exportJsonBtn" type="button" disabled>Export JSON</button>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <dialog class="modal" id="guideModal">
+    <div class="modal__inner">
+      <div class="modal__top">
+        <div>
+          <div class="kicker">SETUP</div>
+          <h2>Make scans real (Free)</h2>
+        </div>
+        <button class="btn btn--ghost" id="closeGuideBtn" type="button">Close</button>
+      </div>
+
+      <ol class="steps">
+        <li>Create a free Helius account → get API key.</li>
+        <li>In Vercel project settings: <b>Environment Variables</b> → add <span class="mono">HELIUS_API_KEY</span>.</li>
+        <li>Redeploy.</li>
+        <li>Scan a wallet.</li>
+      </ol>
+
+      <div class="note">
+        This build is Solana-first. DexScreener is used for token market enrichment (free, no key).
+      </div>
+    </div>
+  </dialog>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
