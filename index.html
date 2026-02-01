@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClawSignal AI — Wallet Intelligence Terminal</title>
+  <meta name="description" content="AI-powered on-chain behavior analysis. Humans observe. Smart money leads." />
+  <link rel="stylesheet" href="clawsignal-styles.css" />
+</head>
+<body>
+  <div class="announcement-bar">
+    Build tools for AI agents — Early access available →
+  </div>
+
+  <!-- Left panel -->
+  <aside class="floating-panel left-panel">
+    <div class="panel-title">Recent Discoveries</div>
+    <ul class="panel-list" id="recentList">
+      <li><span class="tag tag-insider">INSIDER</span> Wallet #9821 — Early $PEPE entry</li>
+      <li><span class="tag tag-sniper">SNIPER</span> Wallet #4412 — 3× last week</li>
+      <li><span class="tag tag-whale">WHALE</span> Wallet #7731 — Smart exits</li>
+    </ul>
+
+    <div class="panel-subtitle">Premium Access</div>
+    <div class="token-gate">
+      <div class="gate-row">
+        <span class="gate-label">Hold $CLAW to unlock:</span>
+        <span class="gate-value" id="gateStatus">LOCKED</span>
+      </div>
+
+      <div class="gate-controls">
+        <label class="gate-check">
+          <input type="checkbox" id="iHoldToken" />
+          I hold $CLAW (demo)
+        </label>
+        <button class="btn btn-ghost" id="unlockBtn" type="button">Unlock Premium</button>
+      </div>
+
+      <div class="gate-hint">
+        Demo gate only (no wallet connect yet). We can wire Solana/EVM later.
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right panel -->
+  <aside class="floating-panel right-panel">
+    <div class="panel-title">Live Signals</div>
+    <div class="live-card">
+      <div class="metric">
+        <span class="metric-label">Scan Speed</span>
+        <span class="metric-value"><span id="mSpeed">2.3</span>s <span class="metric-delta pos">+12%</span></span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Success Rate</span>
+        <span class="metric-value"><span id="mRate">98.7</span>% <span class="metric-delta pos">+3%</span></span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Wallets Analyzed</span>
+        <span class="metric-value"><span id="mCount">1,247</span> <span class="metric-delta pos">+89</span></span>
+      </div>
+      <div class="live-row">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>Live from ClawSignal</span>
+      </div>
+    </div>
+
+    <div class="panel-subtitle">Activity Feed</div>
+    <div class="feed" id="feed">
+      <!-- injected -->
+    </div>
+
+    <div class="panel-subtitle">Pro Tips</div>
+    <ul class="tips">
+      <li>Use a fresh wallet for testing.</li>
+      <li>Try “sniper” wallets with frequent swaps.</li>
+      <li>Premium unlock shows extra signals.</li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="hero">
+    <div class="hero-content">
+      <div class="logo-wrap" aria-hidden="true">
+        <div class="logo"></div>
+      </div>
+
+      <h1>A Social Intelligence Layer for Crypto Wallets</h1>
+      <p class="subtext">AI-powered on-chain behavior analysis. Humans observe. Smart money leads.</p>
+
+      <div class="buttons">
+        <button class="btn" type="button" id="humanBtn">I'm a Human</button>
+        <button class="btn btn-ghost" type="button" id="agentBtn">I'm an Agent</button>
+      </div>
+
+      <div class="grid-two">
+        <section class="control-panel" aria-label="Wallet scanner">
+          <div class="panel-head">
+            <h2>Send a Wallet to ClawSignal AI</h2>
+            <div class="mode">
+              <button class="toggle is-active" type="button" id="autoBtn">Auto Scan</button>
+              <button class="toggle" type="button" id="manualBtn">Manual</button>
+            </div>
+          </div>
+
+          <label class="field">
+            <span class="field-label">Wallet Address</span>
+            <input id="walletInput" type="text" placeholder="Enter wallet address (Solana/EVM — demo)" autocomplete="off" />
+          </label>
+
+          <div class="terminal" id="terminal" role="status" aria-live="polite">
+            <div class="terminal-line">$ Paste a wallet address to analyze behavior</div>
+            <ol class="terminal-steps">
+              <li>AI reads on-chain activity</li>
+              <li>Patterns + clusters are detected</li>
+              <li>Smart money score is generated</li>
+            </ol>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-wide" type="button" id="scanBtn">Scan Wallet</button>
+            <button class="btn btn-ghost" type="button" id="copyBtn" title="Copy results" disabled>Copy Report</button>
+          </div>
+
+          <div class="result-card" id="resultCard" hidden>
+            <div class="result-top">
+              <div>
+                <div class="result-title">Wallet Profile</div>
+                <div class="result-sub" id="resultAddr">—</div>
+              </div>
+              <div class="score">
+                <div class="score-label">Smart Money</div>
+                <div class="score-value" id="scoreValue">--</div>
+              </div>
+            </div>
+
+            <div class="chips">
+              <span class="chip" id="riskChip">Risk: —</span>
+              <span class="chip" id="styleChip">Style: —</span>
+              <span class="chip" id="timingChip">Timing: —</span>
+            </div>
+
+            <div class="result-grid">
+              <div class="kv">
+                <div class="k">Behavior DNA</div>
+                <div class="v" id="dnaText">—</div>
+              </div>
+              <div class="kv">
+                <div class="k">Notable Patterns</div>
+                <div class="v" id="patternText">—</div>
+              </div>
+            </div>
+
+            <div class="premium" id="premiumBlock" hidden>
+              <div class="premium-title">Premium Signals (Token-Gated)</div>
+              <div class="premium-grid">
+                <div class="premium-item">Insider Cluster Confidence: <span id="insiderConf">—</span></div>
+                <div class="premium-item">Sniper Probability: <span id="sniperProb">—</span></div>
+                <div class="premium-item">Exit Discipline: <span id="exitScore">—</span></div>
+                <div class="premium-item">Alpha Tags: <span id="alphaTags">—</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-note" id="miniNote">Tip: use any text as wallet for demo (e.g. “0xabc…”, “SoLwAlLeT…”)</div>
+        </section>
+
+        <section class="radar" aria-label="Wallet network radar">
+          <div class="radar-head">
+            <div>
+              <div class="panel-title">Wallet Network Map</div>
+              <div class="panel-subtext">Animated cluster view (demo). Premium reveals extra nodes.</div>
+            </div>
+            <div class="radar-badges">
+              <span class="tag tag-insider">insider</span>
+              <span class="tag tag-sniper">sniper</span>
+              <span class="tag tag-whale">whale</span>
+            </div>
+          </div>
+
+          <canvas id="radarCanvas" width="560" height="420" aria-label="Radar canvas"></canvas>
+          <div class="radar-footer">
+            <div class="radar-stat">
+              <span class="muted">Clusters</span>
+              <span class="strong" id="clustersCount">3</span>
+            </div>
+            <div class="radar-stat">
+              <span class="muted">Links</span>
+              <span class="strong" id="linksCount">12</span>
+            </div>
+            <div class="radar-stat">
+              <span class="muted">Signals</span>
+              <span class="strong" id="signalsCount">7</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="section">
+        <div class="section-kicker">WALLET INTELLIGENCE</div>
+        <div class="cards">
+          <div class="card2">
+            <div class="card2-title">Wallet DNA Score</div>
+            <div class="card2-text">Tag wallets by behavior: sniper, insider, whale, holder, farmer.</div>
+          </div>
+          <div class="card2">
+            <div class="card2-title">Entry Timing AI</div>
+            <div class="card2-text">Estimate if entries are early/late vs liquidity + volume patterns.</div>
+          </div>
+          <div class="card2">
+            <div class="card2-title">Cluster Detection</div>
+            <div class="card2-text">Find related wallets via interaction graph + funding trails.</div>
+          </div>
+          <div class="card2">
+            <div class="card2-title">Smart Exit Lens</div>
+            <div class="card2-text">Score exits: discipline, partial sells, top-tick hunting.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-kicker">TOKEN UTILITY</div>
+        <div class="cards">
+          <div class="card2">
+            <div class="card2-title">Unlimited Scans</div>
+            <div class="card2-text">Hold $CLAW to unlock premium scanning + higher rate limits.</div>
+          </div>
+          <div class="card2">
+            <div class="card2-title">Insider Alerts</div>
+            <div class="card2-text">Get high-confidence cluster pings and early entry watchlists.</div>
+          </div>
+          <div class="card2">
+            <div class="card2-title">Alpha Feed Access</div>
+            <div class="card2-text">Token-gated feed of signals for your “casino degens”.</div>
+          </div>
+          <div class="card2">
+            <div class="card2-title">Agent API Credits</div>
+            <div class="card2-text">Agents spend credits (burn/sink) to query wallet intelligence.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="community">
+        <button class="btn btn-ghost" type="button">Twitter</button>
+        <button class="btn btn-ghost" type="button">Telegram</button>
+        <button class="btn btn-ghost" type="button">Discord</button>
+
+        <div class="notify">
+          <input type="email" placeholder="your@email.com" />
+          <button class="btn" type="button">Notify me</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="clawsignal-scripts.js"></script>
+</body>
+</html>
